@@ -5,7 +5,7 @@ Implementation of face recognition in Python using OpenCV.
 1. Python 2.7.13  
    Link: https://www.python.org/downloads/release/python-2713/  
 
-2. NumPy
+2. NumPy  
    Link: https://pypi.python.org/pypi/numpy  
    Installation Command: pip install numpy-1.13.x-cp27.whl  
 
