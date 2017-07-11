@@ -6,7 +6,7 @@ if __name__ == '__main__':
     facesDetected = 0
 
     faceRecognitionEngine = FaceRecognitionEngine()
-    image = faceRecognitionEngine.loadImage("input-7.jpg")
+    '''image = faceRecognitionEngine.loadImage("input-7.jpg")
     grayImage = faceRecognitionEngine.convertToGray(image)
     faces = faceRecognitionEngine.detectFaces(image)
 
@@ -25,11 +25,14 @@ if __name__ == '__main__':
 
     # faceRecognitionEngine.learnFace("data\\shahrukh-khan", "srk")
     # faceRecognitionEngine.recognizeFace("3.jpg")
-    # faceRecognitionEngine.showImage(faceRecognitionEngine.resizeImage("input-1.jpg"))
-    '''imagePaths = os.listdir("inputs")
+    # faceRecognitionEngine.showImage(faceRecognitionEngine.resizeImage("input-1.jpg"))'''
+    
+    imagePaths = os.listdir("inputs")
     
     for imagePath in imagePaths:
         print imagePath
-        faceRecognitionEngine.recognizeFace("inputs\\" + imagePath)'''
+        faceRecognitionEngine.recognizeFace("inputs\\" + imagePath)
     
     # faceRecognitionEngine.buildDatabase()
+
+    

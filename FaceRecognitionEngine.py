@@ -85,7 +85,7 @@ class FaceRecognitionEngine:
             
             ID += 1
         # loop ends here...
-        
+
         faceRecognizer.train(listFaces, numpy.array(listIDs))
         faceRecognizer.save("data//face-recognition-database.xml")
 
@@ -123,6 +123,7 @@ class FaceRecognitionEngine:
         # return cv2.resize(self.loadImage(fileName), (200, 200))
 
     def recognizeFace(self, fileName):
+        names = os.listdir("data\\faces")
         faceRecognizer = self.createFaceRecognizer()
         faceRecognizer.load("data\\face-recognition-database.xml")
 
@@ -141,6 +142,7 @@ class FaceRecognitionEngine:
             for (x, y, width, height) in faces:
                 ID, confidence = faceRecognizer.predict(grayImage[y:(y + height), x:(x + width)])
 
-                print "-",confidence,"- "
-
-                print ID
+                if confidence < 50.0:
+                    print "The person is '" + names[ID] + "' with ID = " + str(ID)
+                else:
+                    print "The person is Unknown..."
