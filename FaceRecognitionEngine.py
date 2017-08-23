@@ -1,17 +1,26 @@
 import cv2
 import os
 import numpy
+import time
 
 class FaceRecognitionEngine:
 
     dodgerBlueColor = None
     faceCascadeClassifier = None
+    webcam = None
     
     def __init__(self):
-        global dodgerBlueColor, faceCascadeClassifier
+        self.x = 0
+        self.y = 0
+        self.width = 0
+        self.height = 0
+        self.isRunning = False
+        self.webcamImage = None
+        global dodgerBlueColor, faceCascadeClassifier, webcam
 
         dodgerBlueColor = (255, 144, 30)
         faceCascadeClassifier = cv2.CascadeClassifier("data\\face-cascade-classifier.xml")
+        webcam = cv2.VideoCapture(0)
     
     def loadImage(self, fileName):
         return cv2.imread(fileName)
@@ -45,7 +54,9 @@ class FaceRecognitionEngine:
 
     def showImage(self, image):
         cv2.imshow("", image)
-        cv2.waitKey(0)
+        
+        if cv2.waitKey(1) == 27:
+            self.stopWebcam()
     
     def createFaceRecognizer(self):
         return cv2.face.createLBPHFaceRecognizer()
@@ -122,12 +133,12 @@ class FaceRecognitionEngine:
     # def resizeImage(self, fileName):
         # return cv2.resize(self.loadImage(fileName), (200, 200))
 
-    def recognizeFace(self, fileName):
+    def recognizeFace(self, image):
         names = os.listdir("data\\faces")
         faceRecognizer = self.createFaceRecognizer()
         faceRecognizer.load("data\\face-recognition-database.xml")
 
-        image = self.loadImage(fileName)
+        # image = self.loadImage(imagePath)
         grayImage = self.convertToGray(image)
         faces = self.detectFaces(grayImage)
         facesDetected = self.countFaces(faces)
@@ -137,12 +148,29 @@ class FaceRecognitionEngine:
         # self.showImage(image)
 
         if facesDetected > 0:
-            image = self.markFaces(faces, image)    # needs to be optimized...
-
             for (x, y, width, height) in faces:
+                self.x = x
+                self.y = y
+                self.width = width
+                self.height = height
+
                 ID, confidence = faceRecognizer.predict(grayImage[y:(y + height), x:(x + width)])
 
                 if confidence < 50.0:
-                    print "The person is '" + names[ID] + "' with ID = " + str(ID)
+                    print "The person is '" + names[ID] + "' with ID = " + str(ID) + " with confidence = " + str(confidence)
                 else:
                     print "The person is Unknown..."
+        
+        return image
+
+    def startWebcam(self):
+        self.isRunning = True
+
+        while self.isRunning:
+            returnValue, self.webcamImage = webcam.read(0)
+            cv2.rectangle(self.webcamImage, (self.x, self.y), (self.x + self.width, self.y + self.height), dodgerBlueColor, 2)   # marks faces...
+            self.showImage(self.webcamImage)
+    
+    def stopWebcam(self):
+        self.isRunning = False
+        cv2.destroyAllWindows()
