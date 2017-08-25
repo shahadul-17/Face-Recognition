@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # faceRecognitionEngine.buildDatabase()
 
     threading.Thread(target = faceRecognitionEngine.startWebcam).start()
-
+	
     while True:
         if faceRecognitionEngine.webcamImage is not None:
             image = faceRecognitionEngine.recognizeFace(faceRecognitionEngine.webcamImage)

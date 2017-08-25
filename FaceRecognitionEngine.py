@@ -61,6 +61,35 @@ class FaceRecognitionEngine:
     def createFaceRecognizer(self):
         return cv2.face.createLBPHFaceRecognizer()
 
+    def capture(self):
+        image = self.webcamImage
+        grayImage = self.convertToGray(image)
+        faces = self.detectFaces(grayImage)
+        facesDetected = self.countFaces(faces)
+        
+        if facesDetected > 0:
+            image = self.cropFaces(faces, image)[0]
+            cv2.imwrite("1.jpg", image)
+
+    def resizeData(self, imagePath):
+        image = self.loadImage(imagePath)
+
+        cv2.imshow("", image)
+        cv2.waitKey(0)
+
+        grayImage = self.convertToGray(image)
+        faces = self.detectFaces(grayImage)
+        facesDetected = self.countFaces(faces)
+
+        print facesDetected
+
+        if facesDetected > 0:
+            images = self.cropFaces(faces, image)
+            cv2.resize(images[0], (200, 200))
+            cv2.imwrite(imagePath, images[0])
+            cv2.imshow("", images[0])
+            cv2.waitKey(0)
+
     def buildDatabase(self):
         print "initializing..."
 
